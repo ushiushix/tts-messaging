@@ -16,6 +16,10 @@ custom:
   remover:
     buckets:
       - ${self:custom.prefix}-ttsmsg
+  s3Sync:
+    - bucketName: ${self:custom.prefix}-ttsmsg
+      bucketPrefix: site/
+      localDir: site
 service: ${self:custom.prefix}-tts-messaging
 
 # You can pin your service to only deploy with a specific Serverless version
@@ -85,6 +89,26 @@ resources:
         WebsiteConfiguration:
           IndexDocument: index.html
           ErrorDocument: 404.html
+          RoutingRules:
+            - RoutingRuleCondition:
+                KeyPrefixEquals: index.html
+              RedirectRule:
+                ReplaceKeyWith: site/index.html
+    S3BucketTtsWebsitePolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: S3BucketTts
+        PolicyDocument:
+          Id: WebsitePolicy
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObject
+              Effect: Allow
+              Principal: "*"
+              Action: s3:GetObject
+              Resource:
+                - arn:aws:s3:::${self:custom.prefix}-ttsmsg/*
     GenerateLambdaPermissionTtsS3:
       Type: AWS::Lambda::Permission
       Properties:
@@ -99,3 +123,4 @@ resources:
 
 plugins:
   - serverless-s3-remover
+  - serverless-s3-sync

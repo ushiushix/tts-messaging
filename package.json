@@ -4,6 +4,7 @@
         "xml-escape": ">= 1.1.0"
     },
     "devDependencies": {
-        "serverless-s3-remover": "^0.4.1"
+        "serverless-s3-remover": "^0.4.1",
+        "serverless-s3-sync": "^1.3.0"
     }
 }

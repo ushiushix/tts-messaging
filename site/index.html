@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>メッセージ送信ページ</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script src="jquery.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <h1>メッセージの送信</h1>
+    <form>
+      <p>送信するメッセージを入力して送信ボタンを押してください。</p>
+      <div>
+	<label for="message">メッセージ:</label>
+	<input name="message" type="text" value="" size="80" maxlength="256" id="message" />
+      </div>
+      <button id="submit">送信</button>
+    </form>
+    <p>送信したメッセージは音声合成で読み上げられます。</p>
+    <p><a href="audio.html">再生ページはこちら</a></p>
+  </body>
+  <script type="text/javascript">
+$("button#submit").click(function() {
+    if ($("#message").val() == "") {
+      alert("メッセージが空です");
+      return false;
+    }
+    var button = $(this);
+    button.attr("disabled", true);
+    var data = {
+        message: $("#message").val(),
+    };
+    $.ajax({
+        type:"post",
+        url:"https://ema6o4cnaf.execute-api.us-west-2.amazonaws.com/beta/messages",
+        data:JSON.stringify(data),
+        contentType: 'application/json',
+        dataType: "json",
+        success: function(json_data) {
+            if (json_data['status'] == false) {
+		alert("送信失敗");
+                return;
+            }
+            location.reload();
+        },
+        error: function() {
+            alert("通信失敗");
+        },
+        complete: function() {
+            button.attr("disabled", false);
+        }
+    });
+});
+  </script>
+</html>
