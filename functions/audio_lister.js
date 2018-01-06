@@ -5,9 +5,9 @@ const BUCKET_NAME = process.env.BUCKET;
 const REGION = process.env.REGION
 var URI_BASE = null;
 if (REGION == 'us-east-1') {
-  URI_BASE = 'http://' + BUCKET_NAME + '.s3.amazonaws.com/';
+  URI_BASE = 'http://' + BUCKET_NAME + '.s3-website.amazonaws.com/';
 } else {
-  URI_BASE = 'http://' + BUCKET_NAME + '.s3-' + REGION + '.amazonaws.com/';
+  URI_BASE = 'http://' + BUCKET_NAME + '.s3-website-' + REGION + '.amazonaws.com/';
 }
     
 console.log('Loading function');
