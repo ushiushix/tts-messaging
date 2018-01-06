@@ -11,7 +11,9 @@
 #
 # Happy Coding!
 
-service: tts-messaging
+custom:
+  prefix: ushiushix
+service: ${self:custom.prefix}-tts-messaging
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -29,15 +31,15 @@ provider:
       Action:
         - "s3:*"
       Resource:
-        - arn:aws:s3:::ushiushix-tts2
-        - arn:aws:s3:::ushiushix-tts2/*
+        - arn:aws:s3:::${self:custom.prefix}-ttsmsg
+        - arn:aws:s3:::${self:custom.prefix}-ttsmsg/*
     - Effect: "Allow"
       Action:
         - "polly:*"
       Resource: "*"
   environment:
-    BUCKET: ushiushix-tts2
-    REGION: us-west-2
+    BUCKET: ${self:custom.prefix}-ttsmsg
+    REGION: ${self:provider.region}
 
 package:
   exclude:
@@ -64,20 +66,30 @@ functions:
     handler: functions/tts_generator.handler
     events:
       - s3:
-          bucket: ushiushix-tts2
+          bucket: tts
           event: s3:ObjectCreated:*
           rules:
             - prefix: messages/
             - suffix: .txt
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    S3BucketTts:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.prefix}-ttsmsg
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: 404.html
+    GenerateLambdaPermissionTtsS3:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          "Fn::GetAtt":
+            - GenerateLambdaFunction
+        Principal: s3.amazonaws.com
+        Action: lambda:InvokeFunction
+        SourceAccount:
+          Ref: AWS::AccountId
+        SourceArn: arn:aws:s3:::${self:custom.prefix}-ttsmsg
