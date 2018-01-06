@@ -13,6 +13,9 @@
 
 custom:
   prefix: ushiushix
+  remover:
+    buckets:
+      - ${self:custom.prefix}-ttsmsg
 service: ${self:custom.prefix}-tts-messaging
 
 # You can pin your service to only deploy with a specific Serverless version
@@ -93,3 +96,6 @@ resources:
         SourceAccount:
           Ref: AWS::AccountId
         SourceArn: arn:aws:s3:::${self:custom.prefix}-ttsmsg
+
+plugins:
+  - serverless-s3-remover

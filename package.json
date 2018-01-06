@@ -2,5 +2,8 @@
     "dependencies": {
         "aws-sdk": ">= 2.0.9",
         "xml-escape": ">= 1.1.0"
+    },
+    "devDependencies": {
+        "serverless-s3-remover": "^0.4.1"
     }
 }
