@@ -12,7 +12,7 @@
 # Happy Coding!
 
 custom:
-  prefix: ushiushix
+  #prefix: __PREFIX__  # Uncomment and change the value to what you think unique  in the world
   remover:
     buckets:
       - ${self:custom.prefix}-ttsmsg

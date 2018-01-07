@@ -7,3 +7,7 @@ jspm_packages
 
 # Backup files
 *~
+
+# Files you need to copy and modify before deployment
+serverless.yml
+site/config.js
