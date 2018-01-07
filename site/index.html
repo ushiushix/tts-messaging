@@ -4,6 +4,7 @@
     <title>メッセージ送信ページ</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <script src="jquery.js" type="text/javascript"></script>
+    <script src="config.js" type="text/javascript"></script>
   </head>
   <body>
     <h1>メッセージの送信</h1>
@@ -31,7 +32,7 @@ $("button#submit").click(function() {
     };
     $.ajax({
         type:"post",
-        url:"https://ema6o4cnaf.execute-api.us-west-2.amazonaws.com/beta/messages",
+        url: CONFIG.SERVICE_URI + "messages",
         data:JSON.stringify(data),
         contentType: 'application/json',
         dataType: "json",
